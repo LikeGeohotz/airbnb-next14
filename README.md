@@ -35,7 +35,8 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
-[shacn/ui](https://ui.shadcn.com/)
+- [shacn/ui](https://ui.shadcn.com/)
+- [react-leaflet](https://react-leaflet.js.org/)
 
 ## Use Component
 
