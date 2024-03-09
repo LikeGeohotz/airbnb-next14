@@ -28,8 +28,8 @@ export function ListingCard({
 					className='rounded-lg h-full object-cover'
 				/>
 			</div>
-			<Link href={'/'}>
-				<h3 className='font-medium text-base mt-2'>
+			<Link href={'/'} className='mt-2'>
+				<h3 className='font-medium text-base '>
 					{country?.flag} {country?.label} / {country?.region}
 				</h3>
 				<p className='text-muted-foreground text-sm line-clamp-2'>
