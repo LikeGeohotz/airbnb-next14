@@ -19,7 +19,7 @@ export async function GET() {
     if (!dbUser) {
         dbUser = await prisma.user.create({
             data: {
-                email: user.given_name ?? '',
+                email: user.email ?? '',
                 firstName: user.given_name ?? '',
                 lastName: user.family_name ?? '',
                 id: user.id,
