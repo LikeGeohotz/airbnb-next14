@@ -1,8 +1,8 @@
 'use server'
 
-import { redirect } from "next/navigation"
-import prisma from './lib/db'
-import { supabase } from "./lib/supabase"
+import { redirect } from "next/navigation";
+import prisma from './lib/db';
+import { supabase } from "./lib/supabase";
 
 export async function createAirbnbHome({ userId }: { userId: string }) {
     const data = await prisma.home.findFirst({
@@ -149,4 +149,16 @@ export async function createLocation(formData: FormData) {
         }
     })
     return redirect('/')
+}
+
+export async function addToFavorite(formData: FormData) {
+    const homeId = await formData.get('homeId') as string
+    const userId = await formData.get('userId') as string
+
+    const data = await prisma.favorite.create({
+        data: {
+            homeId: homeId,
+            userId: userId
+        }
+    })
 }
