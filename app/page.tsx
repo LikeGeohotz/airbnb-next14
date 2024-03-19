@@ -11,7 +11,13 @@ async function getData({
 	userId,
 }: {
 	userId: string | undefined;
-	searchParams?: { filter?: string };
+	searchParams?: {
+		filter?: string;
+		country?: string;
+		guest?: string;
+		room?: string;
+		bathroom?: string;
+	};
 }) {
 	const data = await prisma.home.findMany({
 		where: {
@@ -19,6 +25,10 @@ async function getData({
 			addedLocation: true,
 			addedDescription: true,
 			categoryName: searchParams?.filter ?? undefined,
+			country: searchParams?.country ?? undefined,
+			guests: searchParams?.guest ?? undefined,
+			bedrooms: searchParams?.room ?? undefined,
+			bathrooms: searchParams?.bathroom ?? undefined,
 		},
 		select: {
 			id: true,
@@ -39,7 +49,13 @@ async function getData({
 export default function Home({
 	searchParams,
 }: {
-	searchParams?: { filter?: string };
+	searchParams?: {
+		filter?: string;
+		country?: string;
+		guest?: string;
+		room?: string;
+		bathroom?: string;
+	};
 }) {
 	return (
 		<div className='container mx-auto px-5 lg:px-10'>
@@ -54,7 +70,13 @@ export default function Home({
 async function ShowItems({
 	searchParams,
 }: {
-	searchParams?: { filter?: string };
+	searchParams?: {
+		filter?: string;
+		country?: string;
+		guest?: string;
+		room?: string;
+		bathroom?: string;
+	};
 }) {
 	const { getUser } = getKindeServerSession();
 	const user = await getUser();
@@ -63,7 +85,10 @@ async function ShowItems({
 	return (
 		<>
 			{data.length === 0 ? (
-				<NoItems />
+				<NoItems
+					title='Sorry no listings found for this category...'
+					description='Please check a other category or create your own listing!'
+				/>
 			) : (
 				<div className='grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8'>
 					{data.map((item) => (
@@ -77,6 +102,7 @@ async function ShowItems({
 							favoriteId={item.Favorite[0]?.id}
 							isInFavoriteList={item.Favorite.length > 0 ? true : false}
 							homeId={item.id}
+							pathName='/'
 						/>
 					))}
 				</div>

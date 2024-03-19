@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import prisma from './lib/db';
 import { supabase } from "./lib/supabase";
+import { revalidatePath } from "next/cache";
 
 export async function createAirbnbHome({ userId }: { userId: string }) {
     const data = await prisma.home.findFirst({
@@ -152,8 +153,9 @@ export async function createLocation(formData: FormData) {
 }
 
 export async function addToFavorite(formData: FormData) {
-    const homeId = await formData.get('homeId') as string
-    const userId = await formData.get('userId') as string
+    const homeId = formData.get('homeId') as string
+    const userId = formData.get('userId') as string
+    const pathName = formData.get('pathName') as string
 
     const data = await prisma.favorite.create({
         data: {
@@ -161,4 +163,39 @@ export async function addToFavorite(formData: FormData) {
             userId: userId
         }
     })
+    revalidatePath(pathName)
 }
+
+export async function deleteFromFavorite(formData: FormData) {
+    const favoriteId = formData.get("favoriteId") as string;
+    const pathName = formData.get("pathName") as string;
+    const userId = formData.get("userId") as string;
+
+    const data = await prisma.favorite.delete({
+        where: {
+            id: favoriteId,
+            userId: userId,
+        },
+    });
+
+    revalidatePath(pathName);
+}
+
+export async function createReservation(formData: FormData) {
+    const userId = formData.get('userId') as string
+    const homeId = formData.get('homeId') as string
+    const startDate = formData.get('startDate') as string
+    const endDate = formData.get('endDate') as string
+
+    const data = await prisma.reservation.create({
+        data: {
+            userId: userId,
+            startDate: startDate,
+            endDate: endDate,
+            homeId: homeId
+        }
+    })
+
+    return redirect('/')
+}
+
